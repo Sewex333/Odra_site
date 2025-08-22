@@ -1,0 +1,95 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff; 
+}
+
+.container {
+    max-width: 90rem;
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    padding: 4rem 1.5rem;
+}
+
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; 
+    gap: 2.5rem;
+    flex-wrap: nowrap;
+}
+
+.reverse-row {
+    flex-direction: row-reverse;
+}
+
+.blok {
+    flex: 1;
+    max-width: 60%;
+    background-color: #fff; 
+    border-left: 0.4rem solid #dc2626; 
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blok:hover {
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.4rem 1.5rem rgba(220, 38, 38, 0.25); 
+}
+
+.blok h1 {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    color: #dc2626; 
+    margin-bottom: 1rem;
+}
+
+.blok p {
+    margin-bottom: 1.2em;
+    line-height: 1.7;
+    font-size: 1.2rem;
+    color: #333; 
+}
+
+.span1 {
+    font-weight: bold;
+    color: #dc2626; 
+    font-style: italic;
+}
+
+.highlight {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.about-image {
+    flex: 1;
+    max-width: 40%;
+    width: 100%;
+    height: auto;
+    border-radius: 0.8rem;
+    object-fit: cover;
+    box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.25);
+    aspect-ratio: 4 / 3;
+}
+
+@media (max-width: 48rem) {
+    .section-row,
+    .reverse-row {
+        flex-direction: column;
+        align-items: center;
+    }   
+
+    .blok,
+    .about-image {
+        max-width: 100%;
+    }
+
+    .about-image {
+        margin-top: 1rem;
+    }
+}
