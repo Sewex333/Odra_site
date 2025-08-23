@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import Navbar from "./pages/Navbar";
 import Form from "./pages/Form";
 import Footer from "./pages/Footer";
-import videoMain from "../public/filmik_glowna.mp4";
 import { useEffect, useRef } from "react";
 import "./App.css";
 import Map from "./Map";
@@ -60,16 +59,7 @@ function App() {
 
       {/* HERO */}
       <section className="relative h-[60vh] overflow-hidden bg-black">
-        <video
-          ref={videoRef}
-          className="absolute top-0 left-0 w-full h-full object-cover opacity-80"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          src={videoMain}
-        />
+        
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
           <motion.h1
             className="text-white text-4xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg"

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router';
-import videoMain from '/filmik_main.mp4';
-//import videoMain from '/filmik_event.mp4';
 
 const Eventy = () => {
   const [events, setEvents] = useState([]);

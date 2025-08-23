@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Aktualnosci = () => {
   const [aktualnosci, setAktualnosci] = useState([]);
@@ -25,16 +26,22 @@ const Aktualnosci = () => {
     fetchAktualnosci();
   }, []);
 
-  const AktualnoscCard = ({ aktualnosc }) => (
-    <div className={`bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 ${aktualnosc.wyrozniany ? 'border-yellow-400' : 'border-black'}`}>
-      <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-6 text-center">
+  const AktualnoscCard = ({ aktualnosc, index }) => (
+    <motion.div 
+      className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 ${aktualnosc.wyrozniany ? 'border-red-500' : 'border-gray-200'}`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+    >
+      <div className="bg-gradient-to-r from-red-600 to-red-700 p-6 text-center">
         <div className="text-4xl mb-2">{aktualnosc.obrazek}</div>
-        <span className="bg-black text-white px-3 py-1 rounded-full text-sm font-semibold">
+        <span className="bg-white text-red-600 px-3 py-1 rounded-full text-sm font-semibold">
           {aktualnosc.kategoria}
         </span>
         {aktualnosc.wyrozniany && (
           <div className="mt-2">
-            <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+            <span className="bg-black text-white px-2 py-1 rounded-full text-xs font-bold">
               WYRÓŻNIONE
             </span>
           </div>
@@ -42,21 +49,20 @@ const Aktualnosci = () => {
       </div>
       <div className="p-6">
         <p className="text-gray-500 text-sm mb-2">{aktualnosc.data}</p>
-        <h3 className="text-xl font-bold text-black mb-3">{aktualnosc.tytul}</h3>
-        <p className="text-gray-700 mb-4">{aktualnosc.opis}</p>
-        
+        <h3 className="text-xl font-bold text-gray-800 mb-3">{aktualnosc.tytul}</h3>
+        <p className="text-gray-600 mb-4">{aktualnosc.opis}</p>
       </div>
-    </div>
+    </motion.div>
   );
 
   if (loading) {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-white pt-20 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
-            <p>Ładowanie aktualności...</p>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600 mb-4"></div>
+            <p className="text-gray-600">Ładowanie aktualności...</p>
           </div>
         </div>
         <Footer />
@@ -68,12 +74,12 @@ const Aktualnosci = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-white pt-20 flex items-center justify-center">
-          <div className="text-center text-red-500">
+        <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+          <div className="text-center text-red-600">
             <p className="text-xl">{error}</p>
             <button 
               onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-600"
+              className="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
             >
               Spróbuj ponownie
             </button>
@@ -87,33 +93,56 @@ const Aktualnosci = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-white">
-        <section className="bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 opacity-20"></div>
-          <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center border-4 border-white text-2xl">
+      <div className="min-h-screen bg-gray-50">
+        {/* HERO SECTION */}
+        <section className="relative bg-black text-white py-20 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 opacity-20"></div>
+          <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <motion.div 
+              className="flex justify-center mb-6"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center border-4 border-white text-2xl shadow-lg">
                 📰
               </div>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200">
+            </motion.div>
+            <motion.h1 
+              className="text-5xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+            >
               Aktualności
-            </h1>
-            <p className="text-xl opacity-90 max-w-4xl mx-auto leading-relaxed">
-              Bądź na bieżąco z najnowszymi wydarzeniami z życia Future Football Club. 
+            </motion.h1>
+            <motion.p 
+              className="text-xl text-gray-200 max-w-4xl mx-auto leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+            >
+              Bądź na bieżąco z najnowszymi wydarzeniami z życia Odry Szczecin. 
               Sukcesy naszych zawodników, informacje o treningach i nadchodzące wydarzenia.
-            </p>
+            </motion.p>
           </div>
         </section>
 
-        <section className="py-16 bg-gray-100">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-black mb-4">
+        {/* AKTUALNOŚCI */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <motion.div 
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">
                 Największe Osiągniecia
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto rounded-full"></div>
-            </div>
+              <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-red-700 mx-auto rounded-full"></div>
+            </motion.div>
             
             {aktualnosci.length === 0 ? (
               <div className="text-center py-12">
@@ -121,30 +150,43 @@ const Aktualnosci = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                {aktualnosci.map(aktualnosc => (
-                  <AktualnoscCard key={aktualnosc.id} aktualnosc={aktualnosc} />
+                {aktualnosci.map((aktualnosc, index) => (
+                  <AktualnoscCard key={aktualnosc.id} aktualnosc={aktualnosc} index={index} />
                 ))}
               </div>
             )}
           </div>
         </section>
 
+        {/* FACEBOOK SEKCJA */}
         <section className="py-16 bg-white">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-black mb-4">
+          <div className="max-w-7xl mx-auto px-4">
+            <motion.div 
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">
                 Śledź nas na Facebook
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto rounded-full"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-red-700 mx-auto rounded-full"></div>
               <p className="text-gray-600 mt-4">
                  Najnowsze zdjęcia z treningów, relacje z meczów i ważne informacje
               </p>
-            </div>
+            </motion.div>
             
             <div className="flex justify-center">
-              <div className="bg-gray-100 p-8 rounded-lg border-2 border-black shadow-lg">
+              <motion.div 
+                className="bg-white rounded-xl shadow-lg overflow-hidden"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
                 <iframe
-                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FFutureSportClub&tabs=timeline&width=500&height=700&small_header=false&adapt_container_width=true&hide_cover=true&show_facepile=true&appId"
+                  src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2F1945odra&tabs=timeline&width=500&height=700&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
                   width="500"
                   height="700"
                   style={{ border: "none", overflow: "hidden" }}
@@ -153,59 +195,99 @@ const Aktualnosci = () => {
                   allowFullScreen={true}
                   allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                 ></iframe>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        <section className="py-20 bg-gray-900 text-white">
+        {/* CTA SEKCJA */}
+        <section className="py-20 bg-black text-white">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center border-4 border-white text-2xl">
+            <motion.div 
+              className="flex justify-center mb-6"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center border-4 border-white text-2xl shadow-lg">
                 📧
               </div>
-            </div>
-            <h2 className="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200">
-              Future FC
-            </h2>
-             <p className="text-xl mb-6 opacity-90 max-w-2xl mx-auto">
+            </motion.div>
+            <motion.h2 
+              className="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-300"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              Odra Szczecin
+            </motion.h2>
+            <motion.p 
+              className="text-xl mb-6 text-gray-200 max-w-2xl mx-auto"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
               ⚽ Chcesz rozwijać swoje umiejętności w profesjonalnym środowisku?
-            </p>
-            <p className="text-lg mb-10 opacity-80 max-w-2xl mx-auto">
-              Dołącz do <strong>Future FC</strong> – klubu, który stawia na pasję, rozwój i ducha zespołu. Jesteśmy miejscem, gdzie talent spotyka możliwości.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            </motion.p>
+            <motion.p 
+              className="text-lg mb-10 text-gray-300 max-w-2xl mx-auto"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              Dołącz do <strong>Odry Szczecin</strong> – klubu, który stawia na pasję, rozwój i ducha zespołu. Jesteśmy miejscem, gdzie talent spotyka możliwości.
+            </motion.p>
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
               <Link
                 to="/formularz"
-                className="inline-flex items-center bg-yellow-500 text-black font-bold px-6 py-3 rounded-lg hover:bg-yellow-400 transition-colors shadow-lg"
+                className="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 Skontaktuj się
               </Link>
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        <section className="py-16 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400">
-          <div className="max-w-6xl mx-auto px-4">
+        {/* STATYSTYKI */}
+        <section className="py-16 bg-gray-100">
+          <motion.div 
+            className="max-w-7xl mx-auto px-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">250+</div>
-                <div className="text-gray-700 font-semibold">Zawodników</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">15+</div>
-                <div className="text-gray-700 font-semibold">Trenerów</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">12</div>
-                <div className="text-gray-700 font-semibold">Turniejów</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">2017</div>
-                <div className="text-gray-700 font-semibold">Doświadczenie od</div>
-              </div>
+              {[
+                { number: "250+", label: "Zawodników" },
+                { number: "15+", label: "Trenerów" },
+                { number: "12", label: "Turniejów" },
+                { number: "1945", label: "Tradycja od" }
+              ].map((stat, index) => (
+                <motion.div 
+                  key={index}
+                  className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-red-600"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <div className="text-3xl font-bold text-red-600 mb-2">{stat.number}</div>
+                  <div className="text-gray-700 font-semibold">{stat.label}</div>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
         </section>
       </div>
       <Footer />

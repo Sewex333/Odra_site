@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router';
+import { motion } from 'framer-motion';
 
 const Treningi = () => {
   const grupy = [
@@ -50,7 +51,7 @@ const Treningi = () => {
       ]
     },
     {
-      ikona: "🟡",
+      ikona: "🔴",
       tytul: "Seniorzy (A-Klasa)",
       opis: "Profesjonalne treningi dla dorosłych pasjonatów",
       szczegoly: [
@@ -62,115 +63,197 @@ const Treningi = () => {
     }
   ];
 
-  const GrupaCard = ({ grupa }) => (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300 border-2 border-black">
+  const GrupaCard = ({ grupa, index }) => (
+    <motion.div 
+      className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300 border-l-4 border-red-600"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
       <div className="text-4xl mb-4 text-center">{grupa.ikona}</div>
       <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">{grupa.tytul}</h3>
       <p className="text-gray-600 text-center text-sm mb-4">{grupa.opis}</p>
       <ul className="space-y-2">
-        {grupa.szczegoly.map((szczegol, index) => (
-          <li key={index} className="flex items-start">
-            <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+        {grupa.szczegoly.map((szczegol, idx) => (
+          <li key={idx} className="flex items-start">
+            <div className="w-2 h-2 bg-red-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
             <span className="text-gray-700">{szczegol}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   );
 
   return (
     <>
       <Navbar />
       <div className="min-h-screen bg-gray-50 pt-20">
+        {/* HERO SECTION */}
         <div className="bg-gradient-to-r from-black to-gray-800 text-white py-16">
           <div className="max-w-6xl mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Treningi dla <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Wszystkich</span>
-            </h1>
-            <p className="text-xl opacity-90 max-w-3xl mx-auto">
-              Dołącz do Future Football Club – miejsca, gdzie pasja do piłki nożnej łączy pokolenia! Oferujemy treningi dla każdej grupy wiekowej, od najmłodszych po dorosłych, w atmosferze wsparcia i rozwoju.
-            </p>
+            <motion.h1 
+              className="text-4xl md:text-5xl font-bold mb-4"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+            >
+              Treningi dla <span className="text-red-500">Wszystkich</span>
+            </motion.h1>
+            <motion.p 
+              className="text-xl opacity-90 max-w-3xl mx-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+            >
+              Dołącz do Odry Szczecin – miejsca, gdzie pasja do piłki nożnej łączy pokolenia! Oferujemy treningi dla każdej grupy wiekowej, od najmłodszych po dorosłych, w atmosferze wsparcia i rozwoju.
+            </motion.p>
           </div>
         </div>
 
+        {/* STATYSTYKI */}
         <section className="py-12 bg-white">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-20 text-center">
-              <div>
-                <div className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent mb-2">500+</div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="text-3xl font-bold text-red-600 mb-2">500+</div>
                 <div className="text-gray-600">Zawodników</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent mb-2">2017</div>
-                <div className="text-gray-600">Doświadczenie od</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-black mb-2">8</div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="text-3xl font-bold text-red-600 mb-2">1945</div>
+                <div className="text-gray-600">Tradycja od</div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <div className="text-3xl font-bold text-gray-800 mb-2">8</div>
                 <div className="text-gray-600">Grup treningowych</div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        <section className="py-16">
+        {/* GRUPY TRENINGOWE */}
+        <section className="py-16 bg-gray-50">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+            <motion.h2 
+              className="text-3xl font-bold text-center mb-12 text-gray-800"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
               Nasze grupy treningowe
-            </h2>
+            </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {grupy.map((grupa, index) => (
-                <GrupaCard key={index} grupa={grupa} />
+                <GrupaCard key={index} grupa={grupa} index={index} />
               ))}
             </div>
           </div>
         </section>
 
+        {/* DLACZEGO WARTO */}
         <section className="py-16 bg-white">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+            <motion.h2 
+              className="text-3xl font-bold text-center mb-12 text-gray-800"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
               Dlaczego warto do nas dołączyć?
-            </h2>
+            </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-black font-bold text-xl">1</span>
-                </div>
-                <h3 className="font-bold text-gray-800 mb-2">Spersonalizowany rozwój</h3>
-                <p className="text-gray-600 text-sm">Indywidualne podejście do każdego zawodnika, niezależnie od wieku</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-black font-bold text-xl">2</span>
-                </div>
-                <h3 className="font-bold text-gray-800 mb-2">Motywująca atmosfera</h3>
-                <p className="text-gray-600 text-sm">Wspieramy pasję i budujemy wspólnotę</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-black font-bold text-xl">3</span>
-                </div>
-                <h3 className="font-bold text-gray-800 mb-2">Nowoczesne metody</h3>
-                <p className="text-gray-600 text-sm">Treningi oparte na analizie wideo i najlepszych praktykach</p>
-              </div>
+              {[
+                {
+                  numer: "1",
+                  tytul: "Spersonalizowany rozwój",
+                  opis: "Indywidualne podejście do każdego zawodnika, niezależnie od wieku"
+                },
+                {
+                  numer: "2", 
+                  tytul: "Motywująca atmosfera",
+                  opis: "Wspieramy pasję i budujemy wspólnotę w tradycjach Odry"
+                },
+                {
+                  numer: "3",
+                  tytul: "Nowoczesne metody", 
+                  opis: "Treningi oparte na analizie wideo i najlepszych praktykach"
+                }
+              ].map((item, index) => (
+                <motion.div 
+                  key={index}
+                  className="text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <span className="text-white font-bold text-xl">{item.numer}</span>
+                  </div>
+                  <h3 className="font-bold text-gray-800 mb-2">{item.tytul}</h3>
+                  <p className="text-gray-600 text-sm">{item.opis}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
+        {/* CTA SECTION */}
         <section className="py-16 bg-black">
           <div className="max-w-4xl mx-auto px-4 text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">
-              Zacznij swoją <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">piłkarską przygodę</span>
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Niezależnie od wieku, u nas znajdziesz miejsce do rozwoju swojej pasji. Zapisz się na bezpłatną konsultację i dołącz do Future Football Club!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.h2 
+              className="text-3xl font-bold mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              Zacznij swoją <span className="text-red-500">piłkarską przygodę</span>
+            </motion.h2>
+            <motion.p 
+              className="text-xl mb-8 opacity-90"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              Niezależnie od wieku, u nas znajdziesz miejsce do rozwoju swojej pasji. Zapisz się na bezpłatną konsultację i dołącz do Odry Szczecin!
+            </motion.p>
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+            >
               <Link to="/kontakt">
-                <button className="bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition-colors shadow-lg cursor-pointer">
-                  Zapisz się
+                <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-lg cursor-pointer">
+                  Zapisz się teraz
                 </button>
               </Link>
-            </div>
+              <Link to="/">
+                <button className="bg-white text-red-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors shadow-lg cursor-pointer">
+                  Wróć do strony głównej
+                </button>
+              </Link>
+            </motion.div>
           </div>
         </section>
       </div>

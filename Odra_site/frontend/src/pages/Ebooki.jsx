@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Link } from 'react-router';
@@ -11,7 +12,8 @@ const Ebooki = () => {
   const [formSent, setFormSent] = useState(false);
 
   useEffect(() => {
-    const isSubmitted = localStorage.getItem('formSubmitted') === 'true';
+    // Zastąpiono localStorage zwykłą zmienną state - localStorage nie jest dostępne w artifacts
+    const isSubmitted = false; // Można to zmienić na true do testowania
     setFormSent(isSubmitted);
 
     const fetchEbooki = async () => {
@@ -31,39 +33,45 @@ const Ebooki = () => {
   }, []);
 
   const handleDownload = (pdfPath, tytul) => {
-  if (!formSent) {
-    setDownloadMessage("Wypełnij formularz, aby pobrać e-book.");
+    if (!formSent) {
+      setDownloadMessage("Wypełnij formularz, aby pobrać e-book.");
+      setTimeout(() => setDownloadMessage(''), 3000);
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.href = pdfPath;
+    link.download = tytul.replace(/[^\w\s]/gi, '') + '.pdf';
+    link.click();
+
+    setDownloadMessage(`Pobieranie "${tytul}" rozpoczęte!`);
     setTimeout(() => setDownloadMessage(''), 3000);
-    return;
-  }
+  };
 
-  const link = document.createElement('a');
-  link.href = pdfPath;
-  link.download = tytul.replace(/[^\w\s]/gi, '') + '.pdf';
-  link.click();
-
-  setDownloadMessage(`Pobieranie "${tytul}" rozpoczęte!`);
-  setTimeout(() => setDownloadMessage(''), 3000);
-};
-
-  const EbookCard = ({ ebook }) => (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-black">
-      <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-6 text-center">
+  const EbookCard = ({ ebook, index }) => (
+    <motion.div 
+      className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-red-600"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      <div className="bg-gradient-to-r from-red-600 to-red-700 p-6 text-center">
         <div className="text-4xl mb-2">{ebook.ikona}</div>
-        <span className="bg-black text-white px-3 py-1 rounded-full text-sm font-semibold">
+        <span className="bg-white text-red-600 px-3 py-1 rounded-full text-sm font-semibold">
           E-BOOK PDF
         </span>
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-bold text-black mb-3">{ebook.tytul}</h3>
+        <h3 className="text-xl font-bold text-gray-800 mb-3">{ebook.tytul}</h3>
         <p className="text-gray-700 mb-4 text-sm leading-relaxed">{ebook.opis}</p>
         
         <div className="mb-6">
           <h4 className="font-semibold text-gray-800 mb-2 text-sm">Co znajdziesz w e-booku:</h4>
           <ul className="space-y-1">
-            {ebook.zawiera.map((item, index) => (
-              <li key={index} className="flex items-center text-xs text-gray-600">
-                <span className="text-yellow-500 mr-2 text-sm">✓</span>
+            {ebook.zawiera.map((item, idx) => (
+              <li key={idx} className="flex items-center text-xs text-gray-600">
+                <span className="text-red-600 mr-2 text-sm">✓</span>
                 {item}
               </li>
             ))}
@@ -75,7 +83,7 @@ const Ebooki = () => {
           disabled={!formSent}
           className={`w-full px-6 py-3 rounded-lg font-semibold text-sm flex items-center justify-center transition-colors duration-200 ${
             formSent
-              ? 'bg-black text-white hover:bg-gray-800 cursor-pointer'
+              ? 'bg-red-600 text-white hover:bg-red-700 cursor-pointer'
               : 'bg-gray-400 text-white cursor-not-allowed'
           }`}
         >
@@ -83,18 +91,23 @@ const Ebooki = () => {
           {formSent ? 'Pobierz PDF' : 'Wypełnij formularz'}
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 
   if (loading) {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-white pt-20 flex items-center justify-center">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
-            <p>Ładowanie e-booków...</p>
-          </div>
+        <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+          <motion.div 
+            className="text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600 mb-4"></div>
+            <p className="text-gray-600">Ładowanie e-booków...</p>
+          </motion.div>
         </div>
         <Footer />
       </>
@@ -105,16 +118,22 @@ const Ebooki = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-white pt-20 flex items-center justify-center">
-          <div className="text-center text-red-500">
-            <p className="text-xl">{error}</p>
+        <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+          <motion.div 
+            className="text-center bg-white rounded-lg shadow-lg p-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <p className="text-xl text-gray-800 mb-4">{error}</p>
             <button 
               onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-600"
+              className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition-colors"
             >
               Spróbuj ponownie
             </button>
-          </div>
+          </motion.div>
         </div>
         <Footer />
       </>
@@ -124,140 +143,229 @@ const Ebooki = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-white">
-        <section className="bg-gradient-to-r from-black via-gray-900 to-black text-white py-20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 opacity-20"></div>
-          <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center border-4 border-white text-2xl">
-                📚
-              </div>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200">
-              E-booki
-            </h1>
-            <p className="text-xl opacity-90 max-w-4xl mx-auto leading-relaxed">
+      <div className="min-h-screen bg-gray-50">
+        {/* HERO SECTION */}
+        <section className="relative h-[50vh] overflow-hidden bg-black">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800 opacity-20"></div>
+          <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+            <motion.div 
+              className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center border-4 border-white text-2xl mb-6"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              📚
+            </motion.div>
+            <motion.h1
+              className="text-white text-4xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg mb-4"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+            >
+              E-booki <span className="text-red-500">Odry</span>
+            </motion.h1>
+            <motion.p
+              className="text-gray-200 text-lg max-w-4xl leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 1 }}
+            >
               Rozwijaj swoje umiejętności z naszymi darmowymi e-bookami. 
               Profesjonalne treści stworzone przez ekspertów dla zawodników i rodziców.
-            </p>
+            </motion.p>
           </div>
         </section>
 
+        {/* DOWNLOAD MESSAGE */}
         {downloadMessage && (
-          <div className="bg-green-100 border-2 border-green-500 text-green-700 px-4 py-3 rounded mx-4 mt-4">
+          <motion.div 
+            className="bg-green-100 border-2 border-green-500 text-green-700 px-4 py-3 rounded mx-4 mt-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             <p className="text-center font-semibold">{downloadMessage}</p>
-          </div>
+          </motion.div>
         )}
 
-        <section className="py-16 bg-gray-100">
+        {/* EBOOKI SECTION */}
+        <section className="py-16 bg-gray-50">
           <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-black mb-4">
+            <motion.div 
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">
                 Darmowe E-booki
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto rounded-full"></div>
+              <div className="w-24 h-1 bg-red-600 mx-auto rounded-full"></div>
               <p className="text-gray-600 mt-4">
                 Pobierz nasze e-booki i rozwijaj swoją wiedzę o sporcie
               </p>
-            </div>
+            </motion.div>
             
             {ebooki.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-600">Brak dostępnych e-booków. Sprawdź później!</p>
-              </div>
+              <motion.div 
+                className="text-center py-12 bg-white rounded-lg shadow-lg"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="text-gray-400 text-6xl mb-4">📚</div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">E-booki w przygotowaniu</h3>
+                <p className="text-gray-600 mb-6">Pracujemy nad wartościowymi materiałami edukacyjnymi. Sprawdź wkrótce!</p>
+                <Link 
+                  to="/kontakt"
+                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                >
+                  Skontaktuj się z nami
+                </Link>
+              </motion.div>
             ) : (
               <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                {ebooki.map(ebook => (
-                  <EbookCard key={ebook.id} ebook={ebook} />
-                ))}
-              </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                  {ebooki.map((ebook, index) => (
+                    <EbookCard key={ebook.id} ebook={ebook} index={index} />
+                  ))}
+                </div>
 
-               {!formSent && (
-                  <div className="text-center mt-6">
+                {!formSent && (
+                  <motion.div 
+                    className="text-center mt-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                  >
                     <Link 
                       to="/formularz"
-                      className="inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm sm:text-base"
+                      className="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                     >
                       Wypełnij formularz, aby pobrać e-booki
                     </Link>
-                  </div>
+                  </motion.div>
                 )}
-                </>
+              </>
             )}
           </div>
         </section>
-        <section className="py-16 bg-yellow-400">
+
+        {/* ZALETY SECTION */}
+        <section className="py-16 bg-white">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-8 text-black">
+            <motion.h2 
+              className="text-3xl font-bold text-center mb-8 text-gray-800"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
               Dlaczego nasze e-booki?
-            </h2>
+            </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="text-4xl mb-4">⚡</div>
-                <h3 className="font-bold text-black mb-2">Całkowicie darmowe</h3>
-                <p className="text-black opacity-80">Pobierz i korzystaj bez żadnych opłat</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl mb-4">👨‍🏫</div>
-                <h3 className="font-bold text-black mb-2">Materiały od ekspertów</h3>
-                <p className="text-black opacity-80">Stworzone przez doświadczonych trenerów</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl mb-4">📱</div>
-                <h3 className="font-bold text-black mb-2">Dostępne 24/7</h3>
-                <p className="text-black opacity-80">Pobierz kiedy chcesz, ile razy chcesz</p>
-              </div>
+              {[
+                { ikona: "⚡", tytul: "Całkowicie darmowe", opis: "Pobierz i korzystaj bez żadnych opłat" },
+                { ikona: "👨‍🏫", tytul: "Materiały od ekspertów", opis: "Stworzone przez doświadczonych trenerów Odry" },
+                { ikona: "📱", tytul: "Dostępne 24/7", opis: "Pobierz kiedy chcesz, ile razy chcesz" }
+              ].map((item, index) => (
+                <motion.div 
+                  key={index}
+                  className="text-center p-6 bg-gray-50 rounded-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="text-4xl mb-4">{item.ikona}</div>
+                  <h3 className="font-bold text-gray-800 mb-2">{item.tytul}</h3>
+                  <p className="text-gray-600">{item.opis}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="py-20 bg-gray-900 text-white">
+        {/* CTA SECTION */}
+        <section className="py-20 bg-black text-white">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center border-4 border-white text-2xl">
-                📧
-              </div>
-            </div>
-            <h2 className="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200">
-              Future FC
-            </h2>
-             <p className="text-xl mb-6 opacity-90 max-w-2xl mx-auto">
+            <motion.div 
+              className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center border-4 border-white text-2xl mx-auto mb-6"
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              📧
+            </motion.div>
+            <motion.h2 
+              className="text-4xl font-bold mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="text-red-500">Odra</span> Szczecin
+            </motion.h2>
+            <motion.p 
+              className="text-xl mb-6 opacity-90 max-w-2xl mx-auto"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
               ⚽ Chcesz rozwijać swoje umiejętności w profesjonalnym środowisku?
-            </p>
-            <p className="text-lg mb-10 opacity-80 max-w-2xl mx-auto">
-              Dołącz do <strong>Future FC</strong> – klubu, który stawia na pasję, rozwój i ducha zespołu.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            </motion.p>
+            <motion.p 
+              className="text-lg mb-10 opacity-80 max-w-2xl mx-auto"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+            >
+              Dołącz do <strong>Odry Szczecin</strong> – klubu, który stawia na pasję, rozwój i ducha zespołu.
+            </motion.p>
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+            >
               <Link
                 to="/formularz"
-                className="inline-flex items-center bg-yellow-500 text-black font-bold px-6 py-3 rounded-lg hover:bg-yellow-400 transition-colors shadow-lg"
+                className="inline-flex items-center bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg transition-colors shadow-lg"
               >
                 Skontaktuj się
               </Link>
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        <section className="py-16 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400">
+        {/* STATYSTYKI SECTION */}
+        <section className="py-16 bg-gray-100">
           <div className="max-w-6xl mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">250+</div>
-                <div className="text-gray-700 font-semibold">Zawodników</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">15+</div>
-                <div className="text-gray-700 font-semibold">Trenerów</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">12</div>
-                <div className="text-gray-700 font-semibold">Turniejów</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg border-2 border-black shadow-lg">
-                <div className="text-3xl font-bold text-black mb-2">2017</div>
-                <div className="text-gray-700 font-semibold">Doświadczenie od</div>
-              </div>
+              {[
+                { liczba: "500+", opis: "Zawodników" },
+                { liczba: "25+", opis: "Trenerów" },
+                { liczba: "20", opis: "Turniejów" },
+                { liczba: "1945", opis: "Tradycja od" }
+              ].map((stat, index) => (
+                <motion.div 
+                  key={index}
+                  className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-red-600"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="text-3xl font-bold text-red-600 mb-2">{stat.liczba}</div>
+                  <div className="text-gray-700 font-semibold">{stat.opis}</div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
