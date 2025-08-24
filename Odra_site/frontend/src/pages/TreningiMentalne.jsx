@@ -55,16 +55,34 @@ const TreningiMentalne = () => {
     }
   ];
 
-  const trenerzy = [
+  const cennikIndywidualny = [
     {
-      nazwa: "Damian Pepliński",
-      specjalizacja: "Psycholog sportu",
-      zdjecie: "/damian_peplinski.jpg"
+      typ: "Pojedynczy trening",
+      cena: "300 zł",
+      opis: "Sesja 1 na 1 z certyfikowanym trenerem mentalnym"
     },
     {
-      nazwa: "Wiktoria Peplińska",
-      specjalizacja: "Trener mentalny",
-      zdjecie: "/w_peplinska.png"
+      typ: "Pakiet 4 treningi",
+      cena: "1000 zł",
+      opis: "Miesięczny program rozwoju mentalnego"
+    },
+    {
+      typ: "Pakiet 8 treningów", 
+      cena: "1600 zł",
+      opis: "Kompleksowy program budowania mentalności"
+    }
+  ];
+
+  const cennikGrupowy = [
+    {
+      typ: "Praca cykliczna",
+      cena: "40 zł/os.",
+      opis: "Regularne sesje dla grup min. 10 osób"
+    },
+    {
+      typ: "Spotkanie jednorazowe",
+      cena: "100 zł/os.",
+      opis: "Warsztat mentalny dla grup min. 10 osób"
     }
   ];
 
@@ -92,7 +110,50 @@ const TreningiMentalne = () => {
           </div>
         </div>
 
-        <section className="py-20 bg-gray-50">
+        {/* O trenerze mentalnym */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Certyfikowany Trener Mentalny</h2>
+            <div className="bg-white rounded-lg p-8 shadow-lg">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-3xl">
+                  🎓
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Oficjalnie Certyfikowany Sportowy Trener Mentalny</h3>
+              </div>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="text-xl font-bold text-red-600 mb-4">Dalszy rozwój:</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                      Akademia Trenerów Mentalnych (u Jakuba B. Bączka) - październik 2025
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                      Staż w Union Berlin i Hertha Berlin - październik 2025
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold text-red-600 mb-4">Doświadczenie:</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                      Praca z zawodnikami od U6 do Senior
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                      Doświadczenie w pracy z 250+ zawodnikami
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-800 mb-4">
@@ -128,23 +189,36 @@ const TreningiMentalne = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-white">
+        {/* Cennik treningów indywidualnych */}
+        <section className="py-16 bg-gray-50">
           <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-800 mb-4">
-                Nasz Zespół Ekspertów
-              </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-red-600 mx-auto rounded-full"></div>
+            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+              Cennik - Treningi Indywidualne (1 na 1)
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {cennikIndywidualny.map((pakiet, index) => (
+                <div key={index} className="bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow border-2 border-red-100">
+                  <h3 className="text-lg font-bold text-gray-800 mb-3">{pakiet.typ}</h3>
+                  <div className="text-3xl font-bold text-red-600 mb-4">{pakiet.cena}</div>
+                  <p className="text-gray-600 text-sm">{pakiet.opis}</p>
+                </div>
+              ))}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {trenerzy.map((trener, index) => (
+          </div>
+        </section>
+
+        {/* Cennik treningów grupowych */}
+        <section className="py-16 bg-white">
+          <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+              Cennik - Treningi Grupowe (min. 10 osób)
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {cennikGrupowy.map((pakiet, index) => (
                 <div key={index} className="bg-gray-50 rounded-lg p-8 text-center hover:shadow-lg transition-shadow">
-                  <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg bg-white mx-auto mb-4">
-                    <img src={trener.zdjecie} alt={trener.nazwa} className="w-full h-full object-cover"/>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{trener.nazwa}</h3>
-                  <p className="text-red-600 font-semibold mb-2">{trener.specjalizacja}</p>
-                  <p className="text-gray-600">{trener.doswiadczenie}</p>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">{pakiet.typ}</h3>
+                  <div className="text-3xl font-bold text-red-600 mb-4">{pakiet.cena}</div>
+                  <p className="text-gray-600">{pakiet.opis}</p>
                 </div>
               ))}
             </div>
@@ -191,12 +265,12 @@ const TreningiMentalne = () => {
             </h2>
             <p className="text-xl mb-10 text-white opacity-90 max-w-3xl mx-auto">
               Rozwijaj nie tylko swoje umiejętności techniczne, ale także mentalne. 
-              Zapisz się na konsultację z naszym psychologiem sportu.
+              Zapisz się na konsultację z certyfikowanym trenerem mentalnym.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Link to="/formularz">
+              <Link to="/kontakt">
                 <button className="bg-white text-red-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg cursor-pointer">
-                  Zapisz się
+                  Zapisz się na konsultację
                 </button>
               </Link>
             </div>
